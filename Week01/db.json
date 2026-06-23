@@ -1,0 +1,156 @@
+{
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Phở Bò Tái Lăn",
+      "chef": "Đầu bếp Nguyễn",
+      "price": 65000,
+      "originalPrice": 75000,
+      "category": "Món chính",
+      "categoryId": 2,
+      "image": "https://picsum.photos/id/102/200/280",
+      "rating": 4.8,
+      "reviewCount": 142,
+      "stock": 50,
+      "featured": true,
+      "description": "Phở bò tái lăn truyền thống Hà Nội với nước dùng thơm ngọt từ xương ống bò ninh 12 giờ, thịt bò xào tái lăn tỏi thơm lừng, ăn kèm quẩy giòn và hành lá."
+    },
+    {
+      "id": 2,
+      "name": "Bún Chả Hà Nội",
+      "chef": "Đầu bếp Trần",
+      "price": 55000,
+      "originalPrice": 65000,
+      "category": "Món chính",
+      "categoryId": 2,
+      "image": "https://picsum.photos/id/139/200/280",
+      "rating": 4.7,
+      "reviewCount": 210,
+      "stock": 40,
+      "featured": true,
+      "description": "Chả viên và chả miếng nướng than hoa vàng rượm thơm phức, ngâm trong nước mắm chua ngọt ấm nóng, ăn kèm bún tươi và rau sống thanh mát."
+    },
+    {
+      "id": 3,
+      "name": "Nem Rán Hà Nội",
+      "chef": "Đầu bếp Lê",
+      "price": 45000,
+      "originalPrice": 50000,
+      "category": "Khai vị",
+      "categoryId": 1,
+      "image": "https://picsum.photos/id/152/200/280",
+      "rating": 4.6,
+      "reviewCount": 85,
+      "stock": 100,
+      "featured": false,
+      "description": "Nem rán giòn tan với nhân thịt nạc vai xay, tôm tươi, mộc nhĩ, nấm hương, miến và các loại rau củ thái sợi nhỏ cuốn trong bánh đa nem giòn rụm."
+    },
+    {
+      "id": 4,
+      "name": "Lẩu Thái Hải Sản",
+      "chef": "Đầu bếp Phạm",
+      "price": 350000,
+      "originalPrice": 399000,
+      "category": "Lẩu & Nướng",
+      "categoryId": 3,
+      "image": "https://picsum.photos/id/292/200/280",
+      "rating": 4.9,
+      "reviewCount": 64,
+      "stock": 15,
+      "featured": true,
+      "description": "Nước lẩu Thái chua cay đậm đà từ lá chanh, sả, ớt và nước cốt dừa. Ăn kèm hải sản tươi sống gồm tôm sú, mực ống, ngao, cá hồi viên và các loại rau nấm."
+    },
+    {
+      "id": 5,
+      "name": "Cá Hồi Nướng Sốt Bơ Tỏi",
+      "chef": "Đầu bếp Nguyễn",
+      "price": 185000,
+      "originalPrice": 220000,
+      "category": "Món chính",
+      "categoryId": 2,
+      "image": "https://picsum.photos/id/327/200/280",
+      "rating": 4.7,
+      "reviewCount": 53,
+      "stock": 20,
+      "featured": true,
+      "description": "Cá hồi Nauy áp chảo chín tới giữ nguyên độ ngọt mọng, phủ sốt bơ tỏi thơm béo ngậy, ăn kèm khoai tây nghiền và măng tây nướng."
+    },
+    {
+      "id": 6,
+      "name": "Bánh Mì Thịt Nướng",
+      "chef": "Đầu bếp Trần",
+      "price": 30000,
+      "originalPrice": 35000,
+      "category": "Khai vị",
+      "categoryId": 1,
+      "image": "https://picsum.photos/id/365/200/280",
+      "rating": 4.5,
+      "reviewCount": 189,
+      "stock": 150,
+      "featured": false,
+      "description": "Bánh mì Việt Nam giòn rụm bên ngoài, ruột xốp mềm bên trong, nhân thịt lợn nướng mật ong thơm phức kết hợp dưa góp chua ngọt, rau thơm và nước sốt độc quyền."
+    },
+    {
+      "id": 7,
+      "name": "Cà Phê Sữa Đá Sài Gòn",
+      "chef": "Pha chế Hoàng",
+      "price": 29000,
+      "originalPrice": 35000,
+      "category": "Đồ uống",
+      "categoryId": 5,
+      "image": "https://picsum.photos/id/431/200/280",
+      "rating": 4.8,
+      "reviewCount": 320,
+      "stock": 200,
+      "featured": false,
+      "description": "Hạt cà phê Robusta đậm đặc pha phin truyền thống hòa quyện cùng sữa đặc béo ngậy và đá mát lạnh mang đậm hương vị đường phố Sài Gòn."
+    },
+    {
+      "id": 8,
+      "name": "Kem Bơ Đà Lạt",
+      "chef": "Đầu bếp Lê",
+      "price": 39000,
+      "originalPrice": 45000,
+      "category": "Tráng miệng",
+      "categoryId": 4,
+      "image": "https://picsum.photos/id/493/200/280",
+      "rating": 4.6,
+      "reviewCount": 97,
+      "stock": 30,
+      "featured": false,
+      "description": "Bơ sáp Đắk Lắk xay nhuyễn mịn dẻo quánh, kết hợp với một viên kem dừa béo ngậy và dừa khô giòn rụm, món tráng miệng giải nhiệt tuyệt vời."
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Khai vị",
+      "icon": "egg-fried",
+      "dishCount": 8
+    },
+    {
+      "id": 2,
+      "name": "Món chính",
+      "icon": "bowl-soup",
+      "dishCount": 15
+    },
+    {
+      "id": 3,
+      "name": "Lẩu & Nướng",
+      "icon": "fire",
+      "dishCount": 6
+    },
+    {
+      "id": 4,
+      "name": "Tráng miệng",
+      "icon": "cake2",
+      "dishCount": 10
+    },
+    {
+      "id": 5,
+      "name": "Đồ uống",
+      "icon": "cup-hot",
+      "dishCount": 12
+    }
+  ]
+}
