@@ -6,7 +6,7 @@ const DishDetailPage = ({ dishes = [] }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { addToCart } = useCart();
-    const dish = dishes.find((item) => item.id === Number(id));
+    const dish = dishes.find((item) => String(item.id) === String(id));
 
     if (!dish) {
         return (

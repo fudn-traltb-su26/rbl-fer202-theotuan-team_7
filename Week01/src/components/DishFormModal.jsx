@@ -1,13 +1,22 @@
 import { useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 
 const defaultImage = () => (
     'https://picsum.photos/seed/dish' + Math.floor(Math.random() * 100) + '/300/200'
 );
 
+const categoryMap = {
+    'Khai vi': 1,
+    'Mon chinh': 2,
+    'Lau & Nuong': 3,
+    'Trang mieng': 4,
+    'Do uong': 5
+};
+
 const DishFormModal = ({ show, handleClose, onSave, dish }) => {
     const [name, setName] = useState(dish?.name ?? '');
     const [price, setPrice] = useState(dish?.price ?? '');
+    const [originalPrice, setOriginalPrice] = useState(dish?.originalPrice ?? '');
     const [category, setCategory] = useState(dish?.category ?? 'Mon chinh');
     const [chef, setChef] = useState(dish?.chef ?? '');
     const [stock, setStock] = useState(dish?.stock ?? '');
@@ -15,19 +24,24 @@ const DishFormModal = ({ show, handleClose, onSave, dish }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const nextPrice = Number(price);
+        const nextOriginalPrice = Number(originalPrice || price);
+
         onSave({
-            id: dish ? dish.id : Date.now(),
+            ...dish,
             name,
-            price: Number(price),
+            price: nextPrice,
+            originalPrice: nextOriginalPrice,
             category,
+            categoryId: categoryMap[category] ?? 2,
             chef,
             stock: Number(stock),
             image,
             featured: dish ? dish.featured : false,
             rating: dish ? dish.rating : 5.0,
-            reviewCount: dish ? dish.reviewCount : 0
+            reviewCount: dish ? dish.reviewCount : 0,
+            description: dish?.description ?? `${name} duoc che bien moi moi ngay tai TastyHub.`
         });
-        handleClose();
     };
 
     return (
@@ -47,16 +61,31 @@ const DishFormModal = ({ show, handleClose, onSave, dish }) => {
                             required
                         />
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Gia ban (VND)</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Nhap gia ban"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Gia ban (VND)</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Nhap gia ban"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Gia goc (VND)</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Nhap gia goc"
+                                    value={originalPrice}
+                                    onChange={(e) => setOriginalPrice(e.target.value)}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
                     <Form.Group className="mb-3">
                         <Form.Label>Danh muc thuc don</Form.Label>
                         <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -67,26 +96,32 @@ const DishFormModal = ({ show, handleClose, onSave, dish }) => {
                             <option value="Do uong">Do uong</option>
                         </Form.Select>
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Dau bep phu trach</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Nhap ten dau bep"
-                            value={chef}
-                            onChange={(e) => setChef(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>So phan an con lai</Form.Label>
-                        <Form.Control
-                            type="number"
-                            placeholder="Nhap so luong trong kho"
-                            value={stock}
-                            onChange={(e) => setStock(e.target.value)}
-                            required
-                        />
-                    </Form.Group>
+                    <Row>
+                        <Col sm={7}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Dau bep phu trach</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Nhap ten dau bep"
+                                    value={chef}
+                                    onChange={(e) => setChef(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={5}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>So phan con lai</Form.Label>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="So luong"
+                                    value={stock}
+                                    onChange={(e) => setStock(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>Huy bo</Button>

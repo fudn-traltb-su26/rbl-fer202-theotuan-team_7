@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Alert, Button, Spinner } from 'react-bootstrap';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -9,94 +10,40 @@ import DishDetailPage from './pages/DishDetailPage';
 import CartPage from './pages/CartPage';
 import DishManagePage from './pages/DishManagePage';
 import NotFoundPage from './pages/NotFoundPage';
-
-const DISHES = [
-  {
-    id: 1,
-    name: 'Pho Bo Tai Lan',
-    chef: 'Dau bep Nguyen',
-    price: 65000,
-    originalPrice: 75000,
-    category: 'Mon chinh',
-    categoryId: 2,
-    image: 'https://picsum.photos/seed/dish1/300/200',
-    rating: 4.8,
-    reviewCount: 142,
-    stock: 50,
-    featured: true
-  },
-  {
-    id: 2,
-    name: 'Bun Cha Ha Noi',
-    chef: 'Dau bep Tran',
-    price: 55000,
-    originalPrice: 65000,
-    category: 'Mon chinh',
-    categoryId: 2,
-    image: 'https://picsum.photos/seed/dish2/300/200',
-    rating: 4.7,
-    reviewCount: 210,
-    stock: 40,
-    featured: true
-  },
-  {
-    id: 3,
-    name: 'Nem Ran Ha Noi',
-    chef: 'Dau bep Le',
-    price: 45000,
-    originalPrice: 50000,
-    category: 'Khai vi',
-    categoryId: 1,
-    image: 'https://picsum.photos/seed/dish3/300/200',
-    rating: 4.6,
-    reviewCount: 85,
-    stock: 100,
-    featured: false
-  },
-  {
-    id: 4,
-    name: 'Lau Thai Hai San',
-    chef: 'Dau bep Pham',
-    price: 350000,
-    originalPrice: 399000,
-    category: 'Lau & Nuong',
-    categoryId: 3,
-    image: 'https://picsum.photos/seed/dish4/300/200',
-    rating: 4.9,
-    reviewCount: 64,
-    stock: 15,
-    featured: true
-  },
-  {
-    id: 5,
-    name: 'Tra Dao Cam Sa',
-    chef: 'Barista Hoang',
-    price: 32000,
-    originalPrice: 39000,
-    category: 'Do uong',
-    categoryId: 5,
-    image: 'https://picsum.photos/seed/dish5/300/200',
-    rating: 4.5,
-    reviewCount: 74,
-    stock: 60,
-    featured: false
-  }
-];
-
-const CATEGORIES = [
-  { id: 1, name: 'Khai vi', icon: 'KV', dishCount: 8 },
-  { id: 2, name: 'Mon chinh', icon: 'MC', dishCount: 15 },
-  { id: 3, name: 'Lau & Nuong', icon: 'LN', dishCount: 6 },
-  { id: 4, name: 'Trang mieng', icon: 'TM', dishCount: 10 },
-  { id: 5, name: 'Do uong', icon: 'DU', dishCount: 12 }
-];
+import { getCategories, getDishes } from './services/dishService';
 
 function App() {
+  const [dishes, setDishes] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
-  const isAdmin = false;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const isAdmin = true;
 
-  const filteredDishes = DISHES.filter((dish) => {
+  const loadData = useCallback(async () => {
+    try {
+      const [dishData, categoryData] = await Promise.all([
+        getDishes(),
+        getCategories()
+      ]);
+      setDishes(dishData);
+      setCategories(categoryData);
+      setError('');
+    } catch (err) {
+      setError('Khong ket noi duoc json-server. Hay chay npm run server roi thu lai.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(loadData, 0);
+    return () => clearTimeout(timer);
+  }, [loadData]);
+
+  const filteredDishes = useMemo(() => dishes.filter((dish) => {
     const normalizedKeyword = keyword.trim().toLowerCase();
     const matchesKeyword =
       normalizedKeyword === '' ||
@@ -105,7 +52,7 @@ function App() {
     const matchesCategory = activeCategory === null || dish.categoryId === activeCategory;
 
     return matchesKeyword && matchesCategory;
-  });
+  }), [activeCategory, dishes, keyword]);
 
   const featuredDishes = filteredDishes.filter((dish) => dish.featured);
 
@@ -119,76 +66,105 @@ function App() {
     );
   };
 
+  const renderAsyncState = () => {
+    if (loading) {
+      return (
+        <Alert variant="light" className="m-4 text-center border">
+          <Spinner animation="border" size="sm" className="me-2" />
+          Dang tai du lieu tu json-server...
+        </Alert>
+      );
+    }
+
+    if (error) {
+      return (
+        <Alert variant="danger" className="m-4 text-center">
+          <p className="mb-3">{error}</p>
+          <Button
+            variant="outline-danger"
+            onClick={() => {
+              setLoading(true);
+              loadData();
+            }}
+          >
+            Thu lai
+          </Button>
+        </Alert>
+      );
+    }
+
+    return null;
+  };
+
+  const asyncState = renderAsyncState();
+
   return (
     <div>
       <Header />
       <main>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <HomePage
-                categories={CATEGORIES}
-                dishes={featuredDishes}
-                activeCategory={activeCategory}
-                onSelectCategory={handleSelectCategory}
-              />
-            }
-          />
-          <Route
-            path="/menu"
-            element={
-              <MenuPage
-                categories={CATEGORIES}
-                dishes={filteredDishes}
-                activeCategory={activeCategory}
-                onSearch={handleSearch}
-                onSelectCategory={handleSelectCategory}
-              />
-            }
-          />
-          <Route path="/books" element={<Navigate to="/menu" replace />} />
-          <Route path="/menu/:id" element={<DishDetailPage dishes={DISHES} />} />
-          <Route path="/books/:id" element={<DishDetailPage dishes={DISHES} />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route
-            path="/admin/dishes"
-            element={
-              <ProtectedRoute isAllowed={isAdmin}>
-                <DishManagePage
-                  dishes={DISHES}
-                  onAddDish={() => {}}
-                  onUpdateDish={() => {}}
-                  onDeleteDish={() => {}}
+        {asyncState ?? (
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  categories={categories}
+                  dishes={featuredDishes}
+                  activeCategory={activeCategory}
+                  onSelectCategory={handleSelectCategory}
                 />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/admin/books" element={<Navigate to="/admin/dishes" replace />} />
-          <Route
-            path="/promo"
-            element={
-              <HomePage
-                categories={CATEGORIES}
-                dishes={featuredDishes}
-                activeCategory={activeCategory}
-                onSelectCategory={handleSelectCategory}
-              />
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <HomePage
-                categories={CATEGORIES}
-                dishes={featuredDishes}
-                activeCategory={activeCategory}
-                onSelectCategory={handleSelectCategory}
-              />
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+              }
+            />
+            <Route
+              path="/menu"
+              element={
+                <MenuPage
+                  categories={categories}
+                  dishes={filteredDishes}
+                  activeCategory={activeCategory}
+                  onSearch={handleSearch}
+                  onSelectCategory={handleSelectCategory}
+                />
+              }
+            />
+            <Route path="/books" element={<Navigate to="/menu" replace />} />
+            <Route path="/menu/:id" element={<DishDetailPage dishes={dishes} />} />
+            <Route path="/books/:id" element={<DishDetailPage dishes={dishes} />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route
+              path="/admin/dishes"
+              element={
+                <ProtectedRoute isAllowed={isAdmin}>
+                  <DishManagePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/admin/books" element={<Navigate to="/admin/dishes" replace />} />
+            <Route
+              path="/promo"
+              element={
+                <HomePage
+                  categories={categories}
+                  dishes={featuredDishes}
+                  activeCategory={activeCategory}
+                  onSelectCategory={handleSelectCategory}
+                />
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <HomePage
+                  categories={categories}
+                  dishes={featuredDishes}
+                  activeCategory={activeCategory}
+                  onSelectCategory={handleSelectCategory}
+                />
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        )}
       </main>
       <Footer />
     </div>

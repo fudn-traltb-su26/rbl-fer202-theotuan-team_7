@@ -1,51 +1,44 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001';
+const api = axios.create({
+    baseURL: 'http://localhost:3001',
+    timeout: 5000
+});
 
-const FALLBACK_DISHES = [
-    {
-        id: 1,
-        name: 'Phở Bò Tái Lăn',
-        chef: 'Đầu bếp Nguyễn',
-        price: 65000,
-        originalPrice: 75000,
-        category: 'Món chính',
-        image: 'https://picsum.photos/seed/dish1/300/200'
-    },
-    {
-        id: 2,
-        name: 'Bún Chả Hà Nội',
-        chef: 'Đầu bếp Trần',
-        price: 55000,
-        originalPrice: 65000,
-        category: 'Món chính',
-        image: 'https://picsum.photos/seed/dish2/300/200'
-    },
-    {
-        id: 3,
-        name: 'Nem Rán Hà Nội',
-        chef: 'Đầu bếp Lê',
-        price: 45000,
-        originalPrice: 50000,
-        category: 'Khai vị',
-        image: 'https://picsum.photos/seed/dish3/300/200'
-    },
-    {
-        id: 4,
-        name: 'Lẩu Thái Hải Sản',
-        chef: 'Đầu bếp Phạm',
-        price: 350000,
-        originalPrice: 399000,
-        category: 'Lẩu & Nướng',
-        image: 'https://picsum.photos/seed/dish4/300/200'
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        console.error('API error:', error.message);
+        return Promise.reject(error);
     }
-];
+);
 
-export const fetchDishes = async () => {
-    try {
-        const response = await axios.get(`${API_URL}/dishes`);
-        return response.data;
-    } catch {
-        return FALLBACK_DISHES;
-    }
+export const getDishes = async (params = {}) => {
+    const response = await api.get('/dishes', { params });
+    return response.data;
+};
+
+export const getDishById = async (id) => {
+    const response = await api.get(`/dishes/${id}`);
+    return response.data;
+};
+
+export const createDish = async (data) => {
+    const response = await api.post('/dishes', data);
+    return response.data;
+};
+
+export const updateDish = async (id, data) => {
+    const response = await api.put(`/dishes/${id}`, data);
+    return response.data;
+};
+
+export const deleteDish = async (id) => {
+    const response = await api.delete(`/dishes/${id}`);
+    return response.data;
+};
+
+export const getCategories = async () => {
+    const response = await api.get('/categories');
+    return response.data;
 };
