@@ -1,4 +1,5 @@
 import { Badge, Button, Card, Stack } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const DishCard = ({ dish, onAddToCart = () => {} }) => {
     const hasDiscount = dish.originalPrice > dish.price;
@@ -35,15 +36,20 @@ const DishCard = ({ dish, onAddToCart = () => {} }) => {
                         </span>
                     )}
                 </Stack>
-                <Button
-                    variant="primary"
-                    size="sm"
-                    className="w-100 mt-auto"
-                    onClick={() => onAddToCart(dish)}
-                    disabled={isOutOfStock}
-                >
-                    {isOutOfStock ? 'Tam het mon' : 'Them vao gio'}
-                </Button>
+                <div className="mt-auto d-grid gap-2">
+                    <Button as={Link} to={`/menu/${dish.id}`} variant="outline-primary" size="sm">
+                        Xem chi tiet
+                    </Button>
+                    <Button
+                        variant="primary"
+                        size="sm"
+                        className="w-100"
+                        onClick={() => onAddToCart(dish)}
+                        disabled={isOutOfStock}
+                    >
+                        {isOutOfStock ? 'Tam het mon' : 'Them vao gio'}
+                    </Button>
+                </div>
             </Card.Body>
         </Card>
     );

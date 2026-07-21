@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
+import ProtectedRoute from './components/ProtectedRoute';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import MenuPage from './pages/MenuPage';
+import DishDetailPage from './pages/DishDetailPage';
+import CartPage from './pages/CartPage';
+import DishManagePage from './pages/DishManagePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const DISHES = [
   {
@@ -90,6 +95,7 @@ function App() {
   const [cart, setCart] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
+  const isAdmin = false;
 
   const filteredDishes = DISHES.filter((dish) => {
     const normalizedKeyword = keyword.trim().toLowerCase();
@@ -129,6 +135,23 @@ function App() {
     );
   };
 
+  const handleUpdateQuantity = (dishId, nextQuantity) => {
+    if (nextQuantity <= 0) {
+      setCart((prevCart) => prevCart.filter((item) => item.id !== dishId));
+      return;
+    }
+
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.id === dishId ? { ...item, quantity: nextQuantity } : item
+      )
+    );
+  };
+
+  const handleRemoveFromCart = (dishId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== dishId));
+  };
+
   return (
     <div>
       <Header cartCount={totalItems} />
@@ -160,6 +183,45 @@ function App() {
             }
           />
           <Route
+            path="/books"
+            element={<Navigate to="/menu" replace />}
+          />
+          <Route
+            path="/menu/:id"
+            element={<DishDetailPage dishes={DISHES} onAddToCart={handleAddToCart} />}
+          />
+          <Route
+            path="/books/:id"
+            element={<DishDetailPage dishes={DISHES} onAddToCart={handleAddToCart} />}
+          />
+          <Route
+            path="/cart"
+            element={
+              <CartPage
+                cartItems={cart}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemove={handleRemoveFromCart}
+              />
+            }
+          />
+          <Route
+            path="/admin/dishes"
+            element={
+              <ProtectedRoute isAllowed={isAdmin}>
+                <DishManagePage
+                  dishes={DISHES}
+                  onAddDish={() => {}}
+                  onUpdateDish={() => {}}
+                  onDeleteDish={() => {}}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/books"
+            element={<Navigate to="/admin/dishes" replace />}
+          />
+          <Route
             path="/promo"
             element={
               <HomePage
@@ -183,7 +245,7 @@ function App() {
               />
             }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
       <Footer />

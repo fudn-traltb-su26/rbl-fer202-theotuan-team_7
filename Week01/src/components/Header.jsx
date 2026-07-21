@@ -17,6 +17,12 @@ const Header = ({ cartCount = 0 }) => {
                         <Nav.Link as={NavLink} to="/menu">
                             Thuc don
                         </Nav.Link>
+                        <Nav.Link as={NavLink} to="/cart">
+                            Gio hang
+                        </Nav.Link>
+                        <Nav.Link as={NavLink} to="/admin/dishes">
+                            Admin
+                        </Nav.Link>
                         <Nav.Link as={NavLink} to="/promo">
                             Khuyen mai
                         </Nav.Link>
@@ -24,14 +30,14 @@ const Header = ({ cartCount = 0 }) => {
                             Lien he
                         </Nav.Link>
                     </Nav>
-                    <div className="fw-semibold text-light pt-3 pt-md-0">
+                    <NavLink to="/cart" className="fw-semibold text-light text-decoration-none pt-3 pt-md-0">
                         Gio hang{' '}
                         {cartCount > 0 && (
                             <Badge bg="danger" pill>
                                 {cartCount}
                             </Badge>
                         )}
-                    </div>
+                    </NavLink>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
