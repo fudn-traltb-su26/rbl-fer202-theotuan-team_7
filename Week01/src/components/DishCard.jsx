@@ -1,6 +1,6 @@
 import { Badge, Button, Card, Stack } from 'react-bootstrap';
 
-const DishCard = ({ dish, onAddToCart }) => {
+const DishCard = ({ dish, onAddToCart = () => {} }) => {
     const hasDiscount = dish.originalPrice > dish.price;
     const discountPercent = Math.round(((dish.originalPrice - dish.price) / dish.originalPrice) * 100);
     const isOutOfStock = dish.stock === 0;

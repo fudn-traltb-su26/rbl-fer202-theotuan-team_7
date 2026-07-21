@@ -1,6 +1,6 @@
 import { Card, Col, Row } from 'react-bootstrap';
 
-const CategoryList = ({ categories }) => {
+const CategoryList = ({ categories = [] }) => {
     return (
         <div className="text-center">
             {categories.length > 0 ? (

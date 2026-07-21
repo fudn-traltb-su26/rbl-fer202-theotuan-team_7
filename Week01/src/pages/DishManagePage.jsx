@@ -39,6 +39,7 @@ const DishManagePage = ({ dishes, onAddDish, onUpdateDish, onDeleteDish }) => {
                 </Stack>
                 <DishTable dishes={dishes} onEdit={handleEditClick} onDelete={onDeleteDish} />
                 <DishFormModal
+                    key={`${showModal ? 'open' : 'closed'}-${selectedDish?.id ?? 'new'}`}
                     show={showModal}
                     handleClose={() => setShowModal(false)}
                     onSave={handleSave}

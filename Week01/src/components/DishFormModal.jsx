@@ -1,31 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
-const DishFormModal = ({ show, handleClose, onSave, dish }) => {
-    const [name, setName] = useState('');
-    const [price, setPrice] = useState('');
-    const [category, setCategory] = useState('Món chính');
-    const [chef, setChef] = useState('');
-    const [stock, setStock] = useState('');
-    const [image, setImage] = useState('');
+const defaultImage = () => (
+    'https://picsum.photos/seed/dish' + Math.floor(Math.random() * 100) + '/300/200'
+);
 
-    useEffect(() => {
-        if (dish) {
-            setName(dish.name);
-            setPrice(dish.price);
-            setCategory(dish.category);
-            setChef(dish.chef);
-            setStock(dish.stock);
-            setImage(dish.image);
-        } else {
-            setName('');
-            setPrice('');
-            setCategory('Món chính');
-            setChef('');
-            setStock('');
-            setImage('https://picsum.photos/seed/dish' + Math.floor(Math.random() * 100) + '/300/200');
-        }
-    }, [dish, show]);
+const DishFormModal = ({ show, handleClose, onSave, dish }) => {
+    const [name, setName] = useState(dish?.name ?? '');
+    const [price, setPrice] = useState(dish?.price ?? '');
+    const [category, setCategory] = useState(dish?.category ?? 'Mon chinh');
+    const [chef, setChef] = useState(dish?.chef ?? '');
+    const [stock, setStock] = useState(dish?.stock ?? '');
+    const [image] = useState(dish?.image ?? defaultImage);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,64 +33,64 @@ const DishFormModal = ({ show, handleClose, onSave, dish }) => {
     return (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
-                <Modal.Title>{dish ? 'Sửa thông tin món ăn' : 'Thêm món ăn mới'}</Modal.Title>
+                <Modal.Title>{dish ? 'Sua thong tin mon an' : 'Them mon an moi'}</Modal.Title>
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">
-                        <Form.Label>Tên món</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="Nhập tên món ăn" 
-                            value={name} 
-                            onChange={(e) => setName(e.target.value)} 
-                            required 
+                        <Form.Label>Ten mon</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhap ten mon an"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Giá bán (VNĐ)</Form.Label>
-                        <Form.Control 
-                            type="number" 
-                            placeholder="Nhập giá bán" 
-                            value={price} 
-                            onChange={(e) => setPrice(e.target.value)} 
-                            required 
+                        <Form.Label>Gia ban (VND)</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Nhap gia ban"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            required
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Danh mục thực đơn</Form.Label>
+                        <Form.Label>Danh muc thuc don</Form.Label>
                         <Form.Select value={category} onChange={(e) => setCategory(e.target.value)}>
-                            <option value="Món chính">Món chính</option>
-                            <option value="Khai vị">Khai vị</option>
-                            <option value="Lẩu & Nướng">Lẩu & Nướng</option>
-                            <option value="Tráng miệng">Tráng miệng</option>
-                            <option value="Đồ uống">Đồ uống</option>
+                            <option value="Mon chinh">Mon chinh</option>
+                            <option value="Khai vi">Khai vi</option>
+                            <option value="Lau & Nuong">Lau & Nuong</option>
+                            <option value="Trang mieng">Trang mieng</option>
+                            <option value="Do uong">Do uong</option>
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Đầu bếp phụ trách</Form.Label>
-                        <Form.Control 
-                            type="text" 
-                            placeholder="Nhập tên đầu bếp" 
-                            value={chef} 
-                            onChange={(e) => setChef(e.target.value)} 
-                            required 
+                        <Form.Label>Dau bep phu trach</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Nhap ten dau bep"
+                            value={chef}
+                            onChange={(e) => setChef(e.target.value)}
+                            required
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        <Form.Label>Số phần ăn còn lại</Form.Label>
-                        <Form.Control 
-                            type="number" 
-                            placeholder="Nhập số lượng trong kho" 
-                            value={stock} 
-                            onChange={(e) => setStock(e.target.value)} 
-                            required 
+                        <Form.Label>So phan an con lai</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Nhap so luong trong kho"
+                            value={stock}
+                            onChange={(e) => setStock(e.target.value)}
+                            required
                         />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Huỷ bỏ</Button>
-                    <Button variant="danger" type="submit">Lưu lại</Button>
+                    <Button variant="secondary" onClick={handleClose}>Huy bo</Button>
+                    <Button variant="danger" type="submit">Luu lai</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
