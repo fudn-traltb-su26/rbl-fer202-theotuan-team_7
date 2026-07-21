@@ -7,9 +7,9 @@ const DishGrid = ({ dishes, onAddToCart }) => {
     }
 
     return (
-        <Row xs={2} sm={3} md={4} lg={5} className="g-3">
+        <Row className="g-4">
             {dishes.map((dish) => (
-                <Col key={dish.id} className="h-100">
+                <Col key={dish.id} sm={6} lg={3}>
                     <DishCard dish={dish} onAddToCart={onAddToCart} />
                 </Col>
             ))}

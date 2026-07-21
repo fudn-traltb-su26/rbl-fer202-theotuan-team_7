@@ -1,12 +1,10 @@
-import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import MenuPage from './pages/MenuPage';
-import DishManagePage from './pages/DishManagePage';
 
-const INITIAL_DISHES = [
+const DISHES = [
   {
     id: 1,
     name: 'Phở Bò Tái Lăn',
@@ -74,52 +72,15 @@ const CATEGORIES = [
 ];
 
 function App() {
-  const [dishes, setDishes] = useState(INITIAL_DISHES);
-  const [cart, setCart] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [activeCategory, setActiveCategory] = useState(null);
+  const featuredDishes = DISHES.filter((dish) => dish.featured);
 
-  // Cart operations (immutable state updates)
   const handleAddToCart = (dish) => {
-    const existing = cart.find((item) => item.id === dish.id);
-    if (existing) {
-      setCart(cart.map((item) => 
-        item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
-      ));
-    } else {
-      setCart([...cart, { ...dish, quantity: 1 }]);
-    }
+    console.log('Thêm vào giỏ hàng:', dish);
   };
-
-  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  // Admin CRUD operations
-  const handleAddDish = (newDish) => {
-    setDishes([...dishes, newDish]);
-  };
-
-  const handleUpdateDish = (updatedDish) => {
-    setDishes(dishes.map((dish) => (dish.id === updatedDish.id ? updatedDish : dish)));
-  };
-
-  const handleDeleteDish = (id) => {
-    setDishes(dishes.filter((dish) => dish.id !== id));
-  };
-
-  // Filtering logic
-  const featuredDishes = dishes.filter((dish) => dish.featured);
-
-  const filteredDishes = dishes.filter((dish) => {
-    const matchesKeyword = !searchKeyword || 
-      dish.name.toLowerCase().includes(searchKeyword.toLowerCase()) || 
-      dish.chef.toLowerCase().includes(searchKeyword.toLowerCase());
-    const matchesCategory = activeCategory === null || dish.category === activeCategory;
-    return matchesKeyword && matchesCategory;
-  });
 
   return (
     <div>
-      <Header cartCount={totalCartCount} />
+      <Header />
       <main>
         <Routes>
           <Route
@@ -137,22 +98,28 @@ function App() {
             element={
               <MenuPage
                 categories={CATEGORIES}
-                dishes={filteredDishes}
+                dishes={DISHES}
                 onAddToCart={handleAddToCart}
-                onSearch={setSearchKeyword}
-                activeCategory={activeCategory}
-                onSelectCategory={setActiveCategory}
               />
             }
           />
           <Route
-            path="/admin"
+            path="/promo"
             element={
-              <DishManagePage
-                dishes={dishes}
-                onAddDish={handleAddDish}
-                onUpdateDish={handleUpdateDish}
-                onDeleteDish={handleDeleteDish}
+              <HomePage
+                categories={CATEGORIES}
+                dishes={featuredDishes}
+                onAddToCart={handleAddToCart}
+              />
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <HomePage
+                categories={CATEGORIES}
+                dishes={featuredDishes}
+                onAddToCart={handleAddToCart}
               />
             }
           />
