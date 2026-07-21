@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, Button, Spinner } from 'react-bootstrap';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
@@ -10,60 +9,30 @@ import DishDetailPage from './pages/DishDetailPage';
 import CartPage from './pages/CartPage';
 import DishManagePage from './pages/DishManagePage';
 import NotFoundPage from './pages/NotFoundPage';
-import { getCategories, getDishes } from './services/dishService';
+import { useFetch } from './hooks/useFetch';
 
 function App() {
-  const [dishes, setDishes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [keyword, setKeyword] = useState('');
-  const [activeCategory, setActiveCategory] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const {
+    data: dishes,
+    loading: dishesLoading,
+    error: dishesError,
+    refetch: refetchDishes
+  } = useFetch('/dishes');
+  const {
+    data: categories,
+    loading: categoriesLoading,
+    error: categoriesError,
+    refetch: refetchCategories
+  } = useFetch('/categories');
   const isAdmin = true;
 
-  const loadData = useCallback(async () => {
-    try {
-      const [dishData, categoryData] = await Promise.all([
-        getDishes(),
-        getCategories()
-      ]);
-      setDishes(dishData);
-      setCategories(categoryData);
-      setError('');
-    } catch (err) {
-      setError('Khong ket noi duoc json-server. Hay chay npm run server roi thu lai.');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const loading = dishesLoading || categoriesLoading;
+  const error = dishesError || categoriesError;
+  const featuredDishes = dishes.filter((dish) => dish.featured);
 
-  useEffect(() => {
-    const timer = setTimeout(loadData, 0);
-    return () => clearTimeout(timer);
-  }, [loadData]);
-
-  const filteredDishes = useMemo(() => dishes.filter((dish) => {
-    const normalizedKeyword = keyword.trim().toLowerCase();
-    const matchesKeyword =
-      normalizedKeyword === '' ||
-      dish.name.toLowerCase().includes(normalizedKeyword) ||
-      dish.chef.toLowerCase().includes(normalizedKeyword);
-    const matchesCategory = activeCategory === null || dish.categoryId === activeCategory;
-
-    return matchesKeyword && matchesCategory;
-  }), [activeCategory, dishes, keyword]);
-
-  const featuredDishes = filteredDishes.filter((dish) => dish.featured);
-
-  const handleSearch = (nextKeyword) => {
-    setKeyword(nextKeyword);
-  };
-
-  const handleSelectCategory = (categoryId) => {
-    setActiveCategory((currentCategory) =>
-      currentCategory === categoryId ? null : categoryId
-    );
+  const handleRetry = () => {
+    refetchDishes();
+    refetchCategories();
   };
 
   const renderAsyncState = () => {
@@ -79,14 +48,8 @@ function App() {
     if (error) {
       return (
         <Alert variant="danger" className="m-4 text-center">
-          <p className="mb-3">{error}</p>
-          <Button
-            variant="outline-danger"
-            onClick={() => {
-              setLoading(true);
-              loadData();
-            }}
-          >
+          <p className="mb-3">Khong ket noi duoc json-server: {error}</p>
+          <Button variant="outline-danger" onClick={handleRetry}>
             Thu lai
           </Button>
         </Alert>
@@ -106,27 +69,9 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={
-                <HomePage
-                  categories={categories}
-                  dishes={featuredDishes}
-                  activeCategory={activeCategory}
-                  onSelectCategory={handleSelectCategory}
-                />
-              }
+              element={<HomePage categories={categories} dishes={featuredDishes} />}
             />
-            <Route
-              path="/menu"
-              element={
-                <MenuPage
-                  categories={categories}
-                  dishes={filteredDishes}
-                  activeCategory={activeCategory}
-                  onSearch={handleSearch}
-                  onSelectCategory={handleSelectCategory}
-                />
-              }
-            />
+            <Route path="/menu" element={<MenuPage categories={categories} />} />
             <Route path="/books" element={<Navigate to="/menu" replace />} />
             <Route path="/menu/:id" element={<DishDetailPage dishes={dishes} />} />
             <Route path="/books/:id" element={<DishDetailPage dishes={dishes} />} />
@@ -142,25 +87,11 @@ function App() {
             <Route path="/admin/books" element={<Navigate to="/admin/dishes" replace />} />
             <Route
               path="/promo"
-              element={
-                <HomePage
-                  categories={categories}
-                  dishes={featuredDishes}
-                  activeCategory={activeCategory}
-                  onSelectCategory={handleSelectCategory}
-                />
-              }
+              element={<HomePage categories={categories} dishes={featuredDishes} />}
             />
             <Route
               path="/contact"
-              element={
-                <HomePage
-                  categories={categories}
-                  dishes={featuredDishes}
-                  activeCategory={activeCategory}
-                  onSelectCategory={handleSelectCategory}
-                />
-              }
+              element={<HomePage categories={categories} dishes={featuredDishes} />}
             />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

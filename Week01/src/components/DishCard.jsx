@@ -1,12 +1,24 @@
 import { Badge, Button, Card, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useCart } from '../hooks/useCart';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const DishCard = ({ dish }) => {
     const { addToCart } = useCart();
+    const [wishlist, setWishlist] = useLocalStorage('tastyhub_wishlist', []);
     const hasDiscount = dish.originalPrice > dish.price;
     const discountPercent = Math.round(((dish.originalPrice - dish.price) / dish.originalPrice) * 100);
     const isOutOfStock = dish.stock === 0;
+    const dishId = String(dish.id);
+    const isWishlisted = wishlist.includes(dishId);
+
+    const handleToggleWishlist = () => {
+        setWishlist((currentWishlist) =>
+            currentWishlist.includes(dishId)
+                ? currentWishlist.filter((id) => id !== dishId)
+                : [...currentWishlist, dishId]
+        );
+    };
 
     return (
         <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden">
@@ -15,6 +27,15 @@ const DishCard = ({ dish }) => {
                     -{discountPercent}%
                 </Badge>
             )}
+            <Button
+                variant={isWishlisted ? 'danger' : 'light'}
+                size="sm"
+                className="position-absolute top-0 end-0 m-2 rounded-circle wishlist-button"
+                onClick={handleToggleWishlist}
+                aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            >
+                {isWishlisted ? '♥' : '♡'}
+            </Button>
             <Card.Img
                 variant="top"
                 src={dish.image}

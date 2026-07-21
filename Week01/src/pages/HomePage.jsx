@@ -3,7 +3,7 @@ import CategoryList from '../components/CategoryList';
 import DishGrid from '../components/DishGrid';
 import SectionWrapper from '../components/SectionWrapper';
 
-const HomePage = ({ categories, dishes, activeCategory, onSelectCategory }) => {
+const HomePage = ({ categories, dishes }) => {
     return (
         <>
             <Banner />
@@ -14,8 +14,6 @@ const HomePage = ({ categories, dishes, activeCategory, onSelectCategory }) => {
             >
                 <CategoryList
                     categories={categories}
-                    activeCategory={activeCategory}
-                    onSelectCategory={onSelectCategory}
                 />
             </SectionWrapper>
             <SectionWrapper
