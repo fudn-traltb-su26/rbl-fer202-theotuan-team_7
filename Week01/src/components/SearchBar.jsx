@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch = () => {} }) => {
     const [keyword, setKeyword] = useState('');
     const [error, setError] = useState('');
 

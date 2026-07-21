@@ -1,20 +1,33 @@
 import CategoryList from '../components/CategoryList';
 import DishGrid from '../components/DishGrid';
+import SearchBar from '../components/SearchBar';
 import SectionWrapper from '../components/SectionWrapper';
 
-const MenuPage = ({ categories, dishes, onAddToCart }) => {
+const MenuPage = ({
+    categories,
+    dishes,
+    activeCategory,
+    onSearch,
+    onSelectCategory,
+    onAddToCart
+}) => {
     return (
         <>
             <SectionWrapper
-                title="Thực Đơn TastyHub"
-                subtitle="Khám phá đầy đủ các nhóm món ăn đang phục vụ"
+                title="Thuc Don TastyHub"
+                subtitle="Tim kiem va loc cac nhom mon an dang phuc vu"
                 backgroundColor="#f8f9fa"
             >
-                <CategoryList categories={categories} />
+                <SearchBar onSearch={onSearch} />
+                <CategoryList
+                    categories={categories}
+                    activeCategory={activeCategory}
+                    onSelectCategory={onSelectCategory}
+                />
             </SectionWrapper>
             <SectionWrapper
-                title="Tất Cả Món Ăn"
-                subtitle="Dữ liệu được truyền từ App xuống DishGrid rồi xuống từng DishCard qua props"
+                title="Tat Ca Mon An"
+                subtitle="Danh sach duoc tinh tu keyword va danh muc dang chon trong App.jsx"
             >
                 <DishGrid dishes={dishes} onAddToCart={onAddToCart} />
             </SectionWrapper>

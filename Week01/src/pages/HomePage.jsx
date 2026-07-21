@@ -3,20 +3,24 @@ import CategoryList from '../components/CategoryList';
 import DishGrid from '../components/DishGrid';
 import SectionWrapper from '../components/SectionWrapper';
 
-const HomePage = ({ categories, dishes, onAddToCart }) => {
+const HomePage = ({ categories, dishes, activeCategory, onSelectCategory, onAddToCart }) => {
     return (
         <>
             <Banner />
             <SectionWrapper
-                title="Danh Mục Món Ăn"
-                subtitle="Chọn nhanh nhóm món phù hợp với bữa ăn hôm nay"
+                title="Danh Muc Mon An"
+                subtitle="Chon nhanh nhom mon phu hop voi bua an hom nay"
                 backgroundColor="#f8f9fa"
             >
-                <CategoryList categories={categories} />
+                <CategoryList
+                    categories={categories}
+                    activeCategory={activeCategory}
+                    onSelectCategory={onSelectCategory}
+                />
             </SectionWrapper>
             <SectionWrapper
-                title="Món Ăn Nổi Bật"
-                subtitle="Những lựa chọn được khách hàng yêu thích nhất tuần này"
+                title="Mon An Noi Bat"
+                subtitle="Nhung lua chon duoc khach hang yeu thich nhat tuan nay"
             >
                 <DishGrid dishes={dishes} onAddToCart={onAddToCart} />
             </SectionWrapper>
