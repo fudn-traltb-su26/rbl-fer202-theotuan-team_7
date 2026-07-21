@@ -3,23 +3,33 @@ import { NavLink } from 'react-router-dom';
 
 const Header = ({ cartCount = 0 }) => {
     return (
-        <Navbar bg="white" expand="lg" sticky="top" className="shadow-sm py-3">
+        <Navbar bg="dark" variant="dark" expand="md" sticky="top" className="shadow-sm py-3">
             <Container>
-                <Navbar.Brand as={NavLink} to="/" className="fw-bold text-primary-emphasis">
+                <Navbar.Brand as={NavLink} to="/" className="fw-bold">
                     TastyHub
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="main-navigation" />
                 <Navbar.Collapse id="main-navigation">
                     <Nav className="mx-auto">
-                        <Nav.Link as={NavLink} to="/">Trang chu</Nav.Link>
-                        <Nav.Link as={NavLink} to="/menu">Thuc don</Nav.Link>
-                        <Nav.Link as={NavLink} to="/promo">Khuyen mai</Nav.Link>
-                        <Nav.Link as={NavLink} to="/contact">Lien he</Nav.Link>
+                        <Nav.Link as={NavLink} to="/" end>
+                            Trang chu
+                        </Nav.Link>
+                        <Nav.Link as={NavLink} to="/menu">
+                            Thuc don
+                        </Nav.Link>
+                        <Nav.Link as={NavLink} to="/promo">
+                            Khuyen mai
+                        </Nav.Link>
+                        <Nav.Link as={NavLink} to="/contact">
+                            Lien he
+                        </Nav.Link>
                     </Nav>
-                    <div className="fw-semibold">
+                    <div className="fw-semibold text-light pt-3 pt-md-0">
                         Gio hang{' '}
                         {cartCount > 0 && (
-                            <Badge bg="warning" text="dark">{cartCount}</Badge>
+                            <Badge bg="danger" pill>
+                                {cartCount}
+                            </Badge>
                         )}
                     </div>
                 </Navbar.Collapse>

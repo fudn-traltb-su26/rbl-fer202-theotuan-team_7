@@ -1,16 +1,28 @@
-# Giao Diện Responsive - Tuần 05
+# Week05 - React Bootstrap Responsive Test
 
-TastyHub đã được tối ưu hóa giao diện đáp ứng (responsive layout) trên 3 breakpoints chính:
+## Bootstrap Components Used
 
-1. **Mobile (375px - iPhone SE):**
-   - Header thu gọn thành menu Hamburger (Navbar.Toggle & Navbar.Collapse).
-   - Danh sách món ăn hiển thị dưới dạng Grid 2 cột (`xs={2}`).
-   - Các nút "Thêm vào giỏ" căn đều tự động dưới chân thẻ Card.
+| Area | React-Bootstrap components | Responsive behavior |
+| --- | --- | --- |
+| Header | `Navbar`, `Nav`, `Badge`, `Container` | `expand="md"` collapses nav links into a hamburger menu on mobile. |
+| Banner | `Container`, `Button` | Text stays centered and constrained by `.app-hero-copy`. |
+| Category filter | `Row`, `Col`, `Card`, `Button` | `xs={2}`, `sm={3}`, `md={5}` keeps category cards compact. |
+| Dish cards | `Card`, `Card.Img`, `Badge`, `Button`, `Stack` | Cards use fixed image aspect ratio and equal height columns. |
+| Dish grid | `Row`, `Col`, `Alert` | `xs={2}`, `sm={3}`, `md={4}`, `lg={5}` matches the required breakpoints. |
 
-2. **Tablet (768px - iPad):**
-   - Header hiển thị thanh điều hướng ngang đầy đủ.
-   - Danh sách món ăn hiển thị dưới dạng Grid 3 cột (`sm={3}`).
+## Screenshot Checklist
 
-3. **Desktop (1280px):**
-   - Grid món ăn hiển thị 4 cột (`md={4}`) hoặc 5 cột (`lg={5}`).
-   - Bảng quản trị Admin (`DishTable.jsx`) hiển thị đầy đủ thông tin chi tiết.
+Save screenshots in this folder with these names:
+
+- `375-mobile.png`: iPhone SE width, navbar collapsed, dish grid has 2 columns, no horizontal overflow.
+- `768-tablet.png`: tablet width, grid has 3 to 4 columns, cards remain equal height.
+- `1280-desktop.png`: desktop width, grid has 5 columns, header and category filter remain aligned.
+
+## Verification Commands
+
+```powershell
+cd Week01
+npm run lint
+npm run build
+npm run dev
+```

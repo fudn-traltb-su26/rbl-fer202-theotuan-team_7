@@ -28,11 +28,11 @@ const CategoryList = ({
             )}
 
             {categories.length > 0 ? (
-                <Row className="g-3 justify-content-center">
+                <Row xs={2} sm={3} md={5} className="g-3 justify-content-center">
                     {categories.map((category) => (
-                        <Col key={category.id} xs={6} sm={4} md={2}>
+                        <Col key={category.id}>
                             <Card
-                                className={`h-100 border-0 shadow-sm ${activeCategory === category.id ? 'bg-danger-subtle' : ''}`}
+                                className={`h-100 text-center shadow-sm border-0 ${activeCategory === category.id ? 'bg-danger-subtle' : ''}`}
                                 role="button"
                                 onClick={() => onSelectCategory(category.id)}
                             >

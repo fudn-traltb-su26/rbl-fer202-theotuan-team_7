@@ -6,37 +6,43 @@ const DishCard = ({ dish, onAddToCart = () => {} }) => {
     const isOutOfStock = dish.stock === 0;
 
     return (
-        <Card className="h-100 border-0 shadow-sm position-relative">
+        <Card className="h-100 shadow-sm border-0 position-relative overflow-hidden">
             {hasDiscount && (
                 <Badge bg="danger" className="position-absolute top-0 start-0 m-2">
                     -{discountPercent}%
                 </Badge>
             )}
-            <Card.Img variant="top" src={dish.image} alt={dish.name} style={{ height: '180px', objectFit: 'cover' }} />
+            <Card.Img
+                variant="top"
+                src={dish.image}
+                alt={dish.name}
+                className="dish-card-img"
+            />
             <Card.Body className="d-flex flex-column">
-                <Badge bg="warning" text="dark" className="align-self-start mb-2">
+                <Badge bg="info" text="dark" className="align-self-start mb-2">
                     {dish.category}
                 </Badge>
-                <Card.Title className="fw-bold">{dish.name}</Card.Title>
-                <Card.Text className="text-muted mb-2">{dish.chef}</Card.Text>
+                <Card.Title className="fw-bold fs-6">{dish.name}</Card.Title>
+                <Card.Subtitle className="text-muted mb-2">{dish.chef}</Card.Subtitle>
                 <Card.Text className="small text-muted mb-2">
-                    {dish.rating} sao ({dish.reviewCount} đánh giá) · Còn {dish.stock} phần
+                    {dish.rating} sao ({dish.reviewCount} danh gia) - Con {dish.stock} phan
                 </Card.Text>
-                <Stack direction="horizontal" gap={2} className="mb-3">
-                    <span className="fw-bold text-danger">{dish.price.toLocaleString('vi-VN')}đ</span>
+                <Stack direction="horizontal" gap={2} className="mb-3 flex-wrap">
+                    <span className="fw-bold text-danger">{dish.price.toLocaleString('vi-VN')}d</span>
                     {hasDiscount && (
-                        <span className="text-muted text-decoration-line-through">
-                            {dish.originalPrice.toLocaleString('vi-VN')}đ
+                        <span className="text-muted text-decoration-line-through small">
+                            {dish.originalPrice.toLocaleString('vi-VN')}d
                         </span>
                     )}
                 </Stack>
                 <Button
-                    variant="danger"
-                    className="mt-auto"
+                    variant="primary"
+                    size="sm"
+                    className="w-100 mt-auto"
                     onClick={() => onAddToCart(dish)}
                     disabled={isOutOfStock}
                 >
-                    {isOutOfStock ? 'Tạm hết món' : 'Thêm vào giỏ'}
+                    {isOutOfStock ? 'Tam het mon' : 'Them vao gio'}
                 </Button>
             </Card.Body>
         </Card>
