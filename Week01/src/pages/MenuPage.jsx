@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Spinner } from 'react-bootstrap';
 import CategoryList from '../components/CategoryList';
 import DishGrid from '../components/DishGrid';
 import SearchBar from '../components/SearchBar';
@@ -8,9 +10,27 @@ const MenuPage = ({
     dishes,
     activeCategory,
     onSearch,
-    onSelectCategory,
-    onAddToCart
+    onSelectCategory
 }) => {
+    const [visibleDishes, setVisibleDishes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const searchRef = useRef(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setVisibleDishes(dishes);
+            setLoading(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [dishes]);
+
+    useEffect(() => {
+        if (!loading) {
+            searchRef.current?.focus();
+        }
+    }, [loading]);
+
     return (
         <>
             <SectionWrapper
@@ -18,7 +38,7 @@ const MenuPage = ({
                 subtitle="Tim kiem va loc cac nhom mon an dang phuc vu"
                 backgroundColor="#f8f9fa"
             >
-                <SearchBar onSearch={onSearch} />
+                <SearchBar ref={searchRef} onSearch={onSearch} />
                 <CategoryList
                     categories={categories}
                     activeCategory={activeCategory}
@@ -29,7 +49,14 @@ const MenuPage = ({
                 title="Tat Ca Mon An"
                 subtitle="Danh sach duoc tinh tu keyword va danh muc dang chon trong App.jsx"
             >
-                <DishGrid dishes={dishes} onAddToCart={onAddToCart} />
+                {loading ? (
+                    <Alert variant="light" className="text-center border">
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Dang tai thuc don...
+                    </Alert>
+                ) : (
+                    <DishGrid dishes={visibleDishes} />
+                )}
             </SectionWrapper>
         </>
     );

@@ -92,7 +92,6 @@ const CATEGORIES = [
 ];
 
 function App() {
-  const [cart, setCart] = useState([]);
   const [keyword, setKeyword] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
   const isAdmin = false;
@@ -109,21 +108,6 @@ function App() {
   });
 
   const featuredDishes = filteredDishes.filter((dish) => dish.featured);
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  const handleAddToCart = (dish) => {
-    setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === dish.id);
-
-      if (existing) {
-        return prevCart.map((item) =>
-          item.id === dish.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      }
-
-      return [...prevCart, { ...dish, quantity: 1 }];
-    });
-  };
 
   const handleSearch = (nextKeyword) => {
     setKeyword(nextKeyword);
@@ -135,26 +119,9 @@ function App() {
     );
   };
 
-  const handleUpdateQuantity = (dishId, nextQuantity) => {
-    if (nextQuantity <= 0) {
-      setCart((prevCart) => prevCart.filter((item) => item.id !== dishId));
-      return;
-    }
-
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === dishId ? { ...item, quantity: nextQuantity } : item
-      )
-    );
-  };
-
-  const handleRemoveFromCart = (dishId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== dishId));
-  };
-
   return (
     <div>
-      <Header cartCount={totalItems} />
+      <Header />
       <main>
         <Routes>
           <Route
@@ -165,7 +132,6 @@ function App() {
                 dishes={featuredDishes}
                 activeCategory={activeCategory}
                 onSelectCategory={handleSelectCategory}
-                onAddToCart={handleAddToCart}
               />
             }
           />
@@ -178,32 +144,13 @@ function App() {
                 activeCategory={activeCategory}
                 onSearch={handleSearch}
                 onSelectCategory={handleSelectCategory}
-                onAddToCart={handleAddToCart}
               />
             }
           />
-          <Route
-            path="/books"
-            element={<Navigate to="/menu" replace />}
-          />
-          <Route
-            path="/menu/:id"
-            element={<DishDetailPage dishes={DISHES} onAddToCart={handleAddToCart} />}
-          />
-          <Route
-            path="/books/:id"
-            element={<DishDetailPage dishes={DISHES} onAddToCart={handleAddToCart} />}
-          />
-          <Route
-            path="/cart"
-            element={
-              <CartPage
-                cartItems={cart}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemove={handleRemoveFromCart}
-              />
-            }
-          />
+          <Route path="/books" element={<Navigate to="/menu" replace />} />
+          <Route path="/menu/:id" element={<DishDetailPage dishes={DISHES} />} />
+          <Route path="/books/:id" element={<DishDetailPage dishes={DISHES} />} />
+          <Route path="/cart" element={<CartPage />} />
           <Route
             path="/admin/dishes"
             element={
@@ -217,10 +164,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/admin/books"
-            element={<Navigate to="/admin/dishes" replace />}
-          />
+          <Route path="/admin/books" element={<Navigate to="/admin/dishes" replace />} />
           <Route
             path="/promo"
             element={
@@ -229,7 +173,6 @@ function App() {
                 dishes={featuredDishes}
                 activeCategory={activeCategory}
                 onSelectCategory={handleSelectCategory}
-                onAddToCart={handleAddToCart}
               />
             }
           />
@@ -241,7 +184,6 @@ function App() {
                 dishes={featuredDishes}
                 activeCategory={activeCategory}
                 onSelectCategory={handleSelectCategory}
-                onAddToCart={handleAddToCart}
               />
             }
           />

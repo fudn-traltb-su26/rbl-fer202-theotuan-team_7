@@ -1,9 +1,11 @@
 import { Badge, Button, Col, Container, Image, Row, Stack } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
 
-const DishDetailPage = ({ dishes = [], onAddToCart = () => {} }) => {
+const DishDetailPage = ({ dishes = [] }) => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const dish = dishes.find((item) => item.id === Number(id));
 
     if (!dish) {
@@ -56,7 +58,7 @@ const DishDetailPage = ({ dishes = [], onAddToCart = () => {} }) => {
                         <Button variant="outline-secondary" onClick={() => navigate(-1)}>
                             Quay lai
                         </Button>
-                        <Button variant="danger" onClick={() => onAddToCart(dish)} disabled={dish.stock === 0}>
+                        <Button variant="danger" onClick={() => addToCart(dish)} disabled={dish.stock === 0}>
                             Them vao gio
                         </Button>
                     </Stack>

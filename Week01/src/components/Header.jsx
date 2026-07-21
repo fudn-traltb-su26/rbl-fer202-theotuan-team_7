@@ -1,7 +1,12 @@
-import { Badge, Container, Nav, Navbar } from 'react-bootstrap';
+import { Badge, Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
+import { useTheme } from '../hooks/useTheme';
 
-const Header = ({ cartCount = 0 }) => {
+const Header = () => {
+    const { totalItems } = useCart();
+    const { isDark, toggleTheme } = useTheme();
+
     return (
         <Navbar bg="dark" variant="dark" expand="md" sticky="top" className="shadow-sm py-3">
             <Container>
@@ -30,14 +35,23 @@ const Header = ({ cartCount = 0 }) => {
                             Lien he
                         </Nav.Link>
                     </Nav>
-                    <NavLink to="/cart" className="fw-semibold text-light text-decoration-none pt-3 pt-md-0">
-                        Gio hang{' '}
-                        {cartCount > 0 && (
-                            <Badge bg="danger" pill>
-                                {cartCount}
-                            </Badge>
-                        )}
-                    </NavLink>
+                    <div className="d-flex align-items-md-center gap-2 pt-3 pt-md-0">
+                        <Button
+                            variant={isDark ? 'outline-light' : 'warning'}
+                            size="sm"
+                            onClick={toggleTheme}
+                        >
+                            {isDark ? 'Light' : 'Dark'}
+                        </Button>
+                        <NavLink to="/cart" className="fw-semibold text-light text-decoration-none">
+                            Gio hang{' '}
+                            {totalItems > 0 && (
+                                <Badge bg="danger" pill>
+                                    {totalItems}
+                                </Badge>
+                            )}
+                        </NavLink>
+                    </div>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

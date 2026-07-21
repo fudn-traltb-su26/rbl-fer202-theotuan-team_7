@@ -3,7 +3,7 @@ import CategoryList from '../components/CategoryList';
 import DishGrid from '../components/DishGrid';
 import SectionWrapper from '../components/SectionWrapper';
 
-const HomePage = ({ categories, dishes, activeCategory, onSelectCategory, onAddToCart }) => {
+const HomePage = ({ categories, dishes, activeCategory, onSelectCategory }) => {
     return (
         <>
             <Banner />
@@ -22,7 +22,7 @@ const HomePage = ({ categories, dishes, activeCategory, onSelectCategory, onAddT
                 title="Mon An Noi Bat"
                 subtitle="Nhung lua chon duoc khach hang yeu thich nhat tuan nay"
             >
-                <DishGrid dishes={dishes} onAddToCart={onAddToCart} />
+                <DishGrid dishes={dishes} />
             </SectionWrapper>
         </>
     );

@@ -1,7 +1,9 @@
 import { Badge, Button, Card, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
 
-const DishCard = ({ dish, onAddToCart = () => {} }) => {
+const DishCard = ({ dish }) => {
+    const { addToCart } = useCart();
     const hasDiscount = dish.originalPrice > dish.price;
     const discountPercent = Math.round(((dish.originalPrice - dish.price) / dish.originalPrice) * 100);
     const isOutOfStock = dish.stock === 0;
@@ -44,7 +46,7 @@ const DishCard = ({ dish, onAddToCart = () => {} }) => {
                         variant="primary"
                         size="sm"
                         className="w-100"
-                        onClick={() => onAddToCart(dish)}
+                        onClick={() => addToCart(dish)}
                         disabled={isOutOfStock}
                     >
                         {isOutOfStock ? 'Tam het mon' : 'Them vao gio'}

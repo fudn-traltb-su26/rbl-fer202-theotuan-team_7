@@ -1,12 +1,9 @@
 import { Alert, Button, ButtonGroup, Container, Image, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useCart } from '../hooks/useCart';
 
-const CartPage = ({
-    cartItems = [],
-    onUpdateQuantity = () => {},
-    onRemove = () => {}
-}) => {
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const CartPage = () => {
+    const { cartItems, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
 
     if (cartItems.length === 0) {
         return (
@@ -24,7 +21,12 @@ const CartPage = ({
 
     return (
         <Container className="py-5">
-            <h1 className="fw-bold mb-4">Gio hang</h1>
+            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <h1 className="fw-bold mb-0">Gio hang</h1>
+                <Button variant="outline-danger" onClick={clearCart}>
+                    Xoa tat ca
+                </Button>
+            </div>
             <Table responsive bordered hover className="align-middle bg-white">
                 <thead className="table-dark">
                     <tr>
@@ -48,14 +50,14 @@ const CartPage = ({
                                 <ButtonGroup size="sm">
                                     <Button
                                         variant="outline-secondary"
-                                        onClick={() => onUpdateQuantity(item.id, item.quantity - 1)}
+                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                     >
                                         -
                                     </Button>
                                     <Button variant="light" disabled>{item.quantity}</Button>
                                     <Button
                                         variant="outline-secondary"
-                                        onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
+                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                     >
                                         +
                                     </Button>
@@ -65,7 +67,7 @@ const CartPage = ({
                                 {(item.price * item.quantity).toLocaleString('vi-VN')}d
                             </td>
                             <td>
-                                <Button variant="outline-danger" size="sm" onClick={() => onRemove(item.id)}>
+                                <Button variant="outline-danger" size="sm" onClick={() => removeFromCart(item.id)}>
                                     Xoa
                                 </Button>
                             </td>
