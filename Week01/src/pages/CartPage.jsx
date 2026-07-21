@@ -1,9 +1,18 @@
 import { Alert, Button, ButtonGroup, Container, Image, Table } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
+import {
+    clearCart,
+    removeFromCart,
+    selectCartItems,
+    selectTotalPrice,
+    updateQuantity
+} from '../store/cartSlice';
 
 const CartPage = () => {
-    const { cartItems, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
+    const dispatch = useDispatch();
+    const cartItems = useSelector(selectCartItems);
+    const totalPrice = useSelector(selectTotalPrice);
 
     if (cartItems.length === 0) {
         return (
@@ -23,7 +32,7 @@ const CartPage = () => {
         <Container className="py-5">
             <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
                 <h1 className="fw-bold mb-0">Gio hang</h1>
-                <Button variant="outline-danger" onClick={clearCart}>
+                <Button variant="outline-danger" onClick={() => dispatch(clearCart())}>
                     Xoa tat ca
                 </Button>
             </div>
@@ -42,7 +51,7 @@ const CartPage = () => {
                     {cartItems.map((item) => (
                         <tr key={item.id}>
                             <td>
-                                <Image src={item.image} alt={item.name} className="cart-thumb" rounded />
+                                <Image src={item.image} alt={item.name} className="cart-thumb" rounded loading="lazy" />
                             </td>
                             <td className="fw-semibold">{item.name}</td>
                             <td>{item.price.toLocaleString('vi-VN')}d</td>
@@ -50,14 +59,14 @@ const CartPage = () => {
                                 <ButtonGroup size="sm">
                                     <Button
                                         variant="outline-secondary"
-                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                        onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity - 1 }))}
                                     >
                                         -
                                     </Button>
                                     <Button variant="light" disabled>{item.quantity}</Button>
                                     <Button
                                         variant="outline-secondary"
-                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                        onClick={() => dispatch(updateQuantity({ id: item.id, quantity: item.quantity + 1 }))}
                                     >
                                         +
                                     </Button>
@@ -67,7 +76,7 @@ const CartPage = () => {
                                 {(item.price * item.quantity).toLocaleString('vi-VN')}d
                             </td>
                             <td>
-                                <Button variant="outline-danger" size="sm" onClick={() => removeFromCart(item.id)}>
+                                <Button variant="outline-danger" size="sm" onClick={() => dispatch(removeFromCart(item.id))}>
                                     Xoa
                                 </Button>
                             </td>

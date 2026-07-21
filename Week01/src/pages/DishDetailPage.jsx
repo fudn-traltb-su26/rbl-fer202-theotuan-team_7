@@ -1,11 +1,12 @@
 import { Badge, Button, Col, Container, Image, Row, Stack } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
+import { addToCart } from '../store/cartSlice';
 
 const DishDetailPage = ({ dishes = [] }) => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { addToCart } = useCart();
+    const dispatch = useDispatch();
     const dish = dishes.find((item) => String(item.id) === String(id));
 
     if (!dish) {
@@ -34,7 +35,7 @@ const DishDetailPage = ({ dishes = [] }) => {
 
             <Row className="g-4 align-items-start">
                 <Col md={6}>
-                    <Image src={dish.image} alt={dish.name} fluid rounded className="shadow-sm w-100 detail-image" />
+                    <Image src={dish.image} alt={dish.name} fluid rounded className="shadow-sm w-100 detail-image" loading="lazy" />
                 </Col>
                 <Col md={6}>
                     <Badge bg="info" text="dark" className="mb-3">{dish.category}</Badge>
@@ -58,7 +59,7 @@ const DishDetailPage = ({ dishes = [] }) => {
                         <Button variant="outline-secondary" onClick={() => navigate(-1)}>
                             Quay lai
                         </Button>
-                        <Button variant="danger" onClick={() => addToCart(dish)} disabled={dish.stock === 0}>
+                        <Button variant="danger" onClick={() => dispatch(addToCart(dish))} disabled={dish.stock === 0}>
                             Them vao gio
                         </Button>
                     </Stack>

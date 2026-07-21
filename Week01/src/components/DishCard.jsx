@@ -1,10 +1,11 @@
 import { Badge, Button, Card, Stack } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useCart } from '../hooks/useCart';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { addToCart } from '../store/cartSlice';
 
 const DishCard = ({ dish }) => {
-    const { addToCart } = useCart();
+    const dispatch = useDispatch();
     const [wishlist, setWishlist] = useLocalStorage('tastyhub_wishlist', []);
     const hasDiscount = dish.originalPrice > dish.price;
     const discountPercent = Math.round(((dish.originalPrice - dish.price) / dish.originalPrice) * 100);
@@ -41,6 +42,7 @@ const DishCard = ({ dish }) => {
                 src={dish.image}
                 alt={dish.name}
                 className="dish-card-img"
+                loading="lazy"
             />
             <Card.Body className="d-flex flex-column">
                 <Badge bg="info" text="dark" className="align-self-start mb-2">
@@ -67,7 +69,7 @@ const DishCard = ({ dish }) => {
                         variant="primary"
                         size="sm"
                         className="w-100"
-                        onClick={() => addToCart(dish)}
+                        onClick={() => dispatch(addToCart(dish))}
                         disabled={isOutOfStock}
                     >
                         {isOutOfStock ? 'Tam het mon' : 'Them vao gio'}
